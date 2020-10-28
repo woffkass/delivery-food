@@ -23,6 +23,11 @@ let login = localStorage.getItem('gloDelivery')
 
 function toggleModalAuth() {
   modalAuth.classList.toggle('is-open')
+  if (modalAuth.classList.contains('is-open')) {
+    disableScroll()
+  } else {
+    enableScroll()
+  }
 }
 
 function authorized() {
@@ -54,7 +59,7 @@ function notAuthorized() {
     event.preventDefault()
     login = loginInput.value
 
-    if (login) {
+    if (login.trim) {
       localStorage.setItem('gloDelivery', login)
 
       toggleModalAuth()
@@ -71,6 +76,11 @@ function notAuthorized() {
   buttonAuth.addEventListener('click', toggleModalAuth)
   closeAuth.addEventListener('click', toggleModalAuth)
   logInForm.addEventListener('submit', logIn)
+  modalAuth.addEventListener('click', function (event) {
+    if (event.target.classList.contains('is-open')) {
+      toggleModalAuth()
+    }
+  })
 }
 
 function checkAuth() {
