@@ -19,6 +19,11 @@ const cardsMenu = document.querySelector('.cards-menu')
 
 let login = localStorage.getItem('gloDelivery')
 
+function validName(str) {
+  const regName = /^[a-zA-Z0-9-_\.][]{1,20}$/
+  return regName.test(str)
+}
+
 function toggleModal() {
   modal.classList.toggle('is-open')
 }
@@ -61,7 +66,7 @@ function notAuthorized() {
     event.preventDefault()
     login = loginInput.value
 
-    if (login.trim) {
+    if (validName(login.trim)) {
       localStorage.setItem('gloDelivery', login)
 
       toggleModalAuth()
@@ -192,3 +197,17 @@ logo.addEventListener('click', function () {
 checkAuth()
 
 createCardRestaurant()
+
+// slider
+
+new Swiper('.swiper-container', {
+  sliderPerView: 1,
+  loop: true,
+  autoplay: true,
+  effect: 'flip',
+  grabCursor: true,
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+  },
+})
