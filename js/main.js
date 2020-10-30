@@ -16,6 +16,7 @@ const restaurants = document.querySelector('.restaurants')
 const menu = document.querySelector('.menu')
 const logo = document.querySelector('.logo')
 const cardsMenu = document.querySelector('.cards-menu')
+const inputSearch = document.querySelector('.input-search')
 
 let login = localStorage.getItem('gloDelivery')
 
@@ -247,7 +248,43 @@ function init() {
 
   checkAuth()
 
-  createCardRestaurant()
+  inputSearch.addEventListener('keypress', function (event) {
+    if (event.charCode === 13) {
+      const value = event.target.value.trim()
+
+      if (!value) {
+        event.target.style.backgroundColor = 'red'
+        event.target.value = ''
+        setTimeout(function () {
+          event.target.style.backgroundColor = ''
+        }, 1500)
+        return
+      }
+
+      getData('./db/partners.json')
+        .then(function (data) {
+          return data.map(function (partner) {
+            return partner.products
+          })
+        })
+        .then(function (linksProduct) {
+          cardsMenu.textContent = ''
+
+          linksProduct.forEach(function (link) {
+            getData(`./db/${link}`).then(function (data) {
+              const resultSearch = data.filter(function (item) {
+                const name = item.name.toLowerCase()
+                return name.includes(value.toLowerCase())
+              })
+              containerPromo.classList.add('hide')
+              restaurants.classList.add('hide')
+              menu.classList.remove('hide')
+              resultSearch.forEach(createCardGood)
+            })
+          })
+        })
+    }
+  })
 }
 
 init()
